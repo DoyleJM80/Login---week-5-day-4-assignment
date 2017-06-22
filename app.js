@@ -27,17 +27,40 @@ app.use(session({
   saveUninitialized: true
 }));
 
-// app. use(function (req, res, next) {
-//
-// });
+app. use(function (req, res, next) {
+  var pathname = parseurl(req).pathname;
+  if(!req.session.user && pathname != '/login') {
+    res.redirect('/login');
+  } else {
+    next();
+  }
+});
 
 
 app.get('/', function (req, res) {
-  res.send('hello user, you are logged in!');
+  res.send('hello ' + req.session.user.username + ', you are logged in!');
 });
 
 app.get('/login', function (req, res) {
   res.render('login', {});
+});
+
+app.post('/login', function (req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+
+  var person = users.find(function (user) {
+    return user.username === username;
+  });
+  if (person && person.password == password) {
+    req.session.user = person;
+  }
+
+  if (req.session.user) {
+    res.redirect('/');
+  } else {
+    res.redirect('/login');
+  }
 });
 
 

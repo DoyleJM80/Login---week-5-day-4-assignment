@@ -22,12 +22,23 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  secret: 'keyboard cat',
+  secret: 'Covfefe',
   resave: false,
   saveUninitialized: true
 }));
 
+// app. use(function (req, res, next) {
+//
+// });
 
+
+app.get('/', function (req, res) {
+  res.send('hello user, you are logged in!');
+});
+
+app.get('/login', function (req, res) {
+  res.render('login', {});
+});
 
 
 
